@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نظام الإحالة</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#3e2723;font-family:'Segoe UI',Arial,sans-serif;color:#fff;min-height:100vh}
+.header{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:18px 15px;background:#2c1810;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.back-btn{background:none;border:none;color:#fff;font-size:28px;cursor:pointer;padding:5px 10px;font-weight:bold}
+.header-icon{position:absolute;left:50%;transform:translateX(-50%);height:35px;width:35px}
+.content{padding:80px 15px 20px}
+.card{background:linear-gradient(135deg,#4e342e 0%,#3e2723 100%);border-radius:18px;padding:25px;margin:0 0 20px;box-shadow:0 6px 20px rgba(0,0,0,.4);border:2px solid #6d4c41}
+.code-section{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:15px}
+.invite-code{background:#5d4037;padding:12px 20px;border-radius:10px;font-size:22px;font-weight:bold;letter-spacing:3px;box-shadow:0 3px 10px rgba(0,0,0,.3);cursor:pointer;min-width:150px;text-align:center}
+.code-label{font-size:14px;color:#d7ccc8;font-weight:500;text-align:left}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:15px;font-size:13px;padding-top:15px;border-top:2px solid #5d4037}
+.stat-item{display:flex;flex-direction:column;gap:5px}
+.stat-label{color:#d7ccc8;font-weight:500;font-size:12px}
+.stat-value{font-size:16px;font-weight:bold;color:#fff}
+.bar{background:linear-gradient(90deg,#6d4c41 0%,#5d4037 50%,#4e342e 100%);border-radius:12px;padding:15px 20px;margin:0 0 15px;display:flex;justify-content:space-between;align-items:center;font-size:14px;box-shadow:0 3px 10px rgba(0,0,0,.3)}
+.bar-label{color:#d7ccc8;font-weight:500}
+.bar-value{font-weight:bold;font-size:16px}
+.rates{display:flex;gap:10px;margin:20px 0;flex-wrap:wrap}
+.rate-box{background:#5d4037;padding:14px 18px;border-radius:10px;font-size:16px;font-weight:bold;position:relative;flex:1;text-align:center;min-width:65px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.rate-box small{display:block;font-size:10px;margin-top:4px;color:#d7ccc8;font-weight:normal}
+.rate-box.locked{opacity:.65;background:#4e342e}
+.rate-box.locked::after{content:"🔒";position:absolute;top:-8px;right:-8px;font-size:18px}
+.rate-box.active{background:#7b5c3d;box-shadow:0 0 15px rgba(139,69,19,.6);transform:scale(1.05)}
+.divider{height:2px;background:#6d4c41;margin:25px 0;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.table-header{display:grid;grid-template-columns:1fr 1.8fr 1fr 1fr;gap:12px;font-size:13px;color:#d7ccc8;padding:12px 8px;text-align:center;font-weight:600;background:#4e342e;border-radius:8px 8px 0 0}
+.table-row{display:grid;grid-template-columns:1fr 1.8fr 1fr 1fr;gap:12px;font-size:12px;padding:14px 8px;text-align:center;align-items:center;background:#5d4037;border-bottom:1px solid #4e342e;transition:.3s}
+.table-row:hover{background:#6d4c41}
+.table-row:last-child{border-radius:0 0 8px 8px;border-bottom:none}
+.user-icon{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:16px;margin:0 auto}
+.status-active{color:#4caf50;font-weight:bold;font-size:11px}
+.status-inactive{color:#ff9800;font-weight:bold;font-size:11px}
+.id-number{color:#fff;font-weight:600;font-size:13px}
+.loading{text-align:center;padding:40px;font-size:18px;color:#d7ccc8}
+.input-section{margin:20px 0;padding:20px;background:#5d4037;border-radius:12px}
+.input-section input{width:100%;padding:12px;font-size:16px;border:2px solid #6d4c41;border-radius:8px;background:#4e342e;color:#fff;text-align:center;letter-spacing:2px}
+.input-section button{width:100%;margin-top:10px;padding:12px;font-size:16px;background:#7b5c3d;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:bold}
+.input-section button:hover{background:#8d6e4d}
+.input-section button:disabled{background:#4e342e;cursor:not-allowed;opacity:0.6}
+.no-data{text-align:center;padding:30px;color:#d7ccc8;font-size:14px}
+.my-info{background:#4e342e;padding:15px;border-radius:10px;margin-bottom:15px;border:1px solid #6d4c41}
+.my-info-title{font-size:13px;color:#d7ccc8;margin-bottom:8px}
+.my-info-value{font-size:15px;font-weight:bold;color:#fff}
+</style>
+</head>
+<body>
+<div class="header">
+<button class="back-btn" onclick="history.back()">←</button>
+<img src="https://cdn-icons-png.flaticon.com/128/2167/2167955.png" alt="Logo" class="header-icon">
+</div>
+<div class="content">
+<div class="loading" id="loading">جاري التحميل...</div>
+<div id="mainContent" style="display:none">
+<div class="card">
+<div class="code-section">
+<div class="invite-code" id="inviteCode" onclick="copyCode()" title="انقر للنسخ">000000</div>
+<div class="code-label">كود الإحالة الخاص بك</div>
+</div>
+<div class="my-info">
+<div class="my-info-title">اسم المستخدم</div>
+<div class="my-info-value" id="myUsername">---</div>
+</div>
+<div class="stats">
+<div class="stat-item"><span class="stat-label">المسجلين</span><span class="stat-value" id="registered">0</span></div>
+<div class="stat-item"><span class="stat-label">الأعضاء النشطين</span><span class="stat-value" id="activeMembers">0</span></div>
+<div class="stat-item"><span class="stat-label">الأرباح</span><span class="stat-value" id="earnings">$0.00</span></div>
+<div class="stat-item"><span class="stat-label">نسبة الحالية</span><span class="stat-value" id="currentRate">10%</span></div>
+</div>
+</div>
+<div class="input-section" id="linkSection">
+<input type="text" id="referralInput" placeholder="أدخل كود الإحالة (6 أرقام)" maxlength="6">
+<button onclick="linkReferral()" id="linkBtn">ربط كود الإحالة</button>
+</div>
+<div class="bar">
+<span class="bar-label">سحوبات الفريق</span>
+<span class="bar-value" id="teamWithdrawals">$0.00</span>
+</div>
+<div class="bar">
+<span class="bar-label">إيداعات الفريق</span>
+<span class="bar-value" id="teamDeposits">$0.00</span>
+</div>
+<div class="rates">
+<div class="rate-box active">10%<small>مفتوح</small></div>
+<div class="rate-box locked">8%</div>
+<div class="rate-box locked">5%</div>
+<div class="rate-box locked">3%</div>
+<div class="rate-box locked">2%</div>
+</div>
+<div class="divider"></div>
+<div class="table-header">
+<div>المعرف</div>
+<div>تاريخ التسجيل</div>
+<div>الإيداع</div>
+<div>الحساب</div>
+</div>
+<div id="referralsTable"></div>
+<div id="noData" class="no-data" style="display:none">لا توجد إحالات بعد</div>
+</div>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import{getAuth,signInAnonymously,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import{getFirestore,doc,getDoc,setDoc,collection,query,where,getDocs,onSnapshot,updateDoc}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+const cfg={apiKey:"AIzaSyA-MK1RYmvpYJrTOBAQcxDqxhp-z_FOb1o",authDomain:"mzjsjjshs.firebaseapp.com",projectId:"mzjsjjshs",storageBucket:"mzjsjjshs.firebasestorage.app",messagingSenderId:"944370558426",appId:"1:944370558426:web:70d4ee772c487f48b58ce3"};
+const app=initializeApp(cfg);
+const auth=getAuth(app);
+const db=getFirestore(app);
+let currentUser=null;
+let myReferralCode=null;
+let isLinked=false;
+const names=["Alex","Jordan","Morgan","Casey","Taylor","Blake","Cameron","Skyler","Riley","Drew","Quinn","Avery","Sage","River","Dakota","Logan","Phoenix","Reese","Charlie","Rowan","Bailey","Parker","Emerson","Finley","Hayden"];
+const colors=["#ff6b6b","#4ecdc4","#95e1d3","#f38181","#aa96da","#fcbad3","#a8d8ea","#ffd93d","#74b9ff","#fd79a8","#ff7675","#fab1a0","#00b894","#00cec9","#0984e3"];
+function genCode(){return String(100000+Math.floor(Math.random()*900000))}
+async function isCodeUnique(code){const q=query(collection(db,"users"),where("referralCode","==",code));const snap=await getDocs(q);return snap.empty}
+async function createUniqueCode(){let code=genCode();let tries=0;while(!await isCodeUnique(code)&&tries<20){code=genCode();tries++}return code}
+function genUsername(){return names[Math.floor(Math.random()*names.length)]+String(1000+Math.floor(Math.random()*8999))}
+function fmtDate(d){return d.toISOString().split('T')[0]}
+function getUserColor(uid){let hash=0;for(let i=0;i<uid.length;i++){hash=uid.charCodeAt(i)+((hash<<5)-hash)}return colors[Math.abs(hash)%colors.length]}
+function showCode(code){myReferralCode=code;document.getElementById('inviteCode').textContent=code}
+function showUsername(username){document.getElementById('myUsername').textContent=username||"---"}
+async function setupUser(user){currentUser=user;const userRef=doc(db,"users",user.uid);try{const userSnap=await getDoc(userRef);if(!userSnap.exists()){const newCode=await createUniqueCode();const newUsername=genUsername();const newUser={uid:user.uid,referralCode:newCode,username:newUsername,linkedReferral:null,createdAt:new Date().toISOString(),deposit:0,withdrawals:0,isActive:false};await setDoc(userRef,newUser);showCode(newCode);showUsername(newUsername);isLinked=false}else{const userData=userSnap.data();if(userData.referralCode){showCode(userData.referralCode)}else{const newCode=await createUniqueCode();await updateDoc(userRef,{referralCode:newCode});showCode(newCode)}showUsername(userData.username);isLinked=!!userData.linkedReferral;if(isLinked){document.getElementById('linkSection').style.display='none'}}startListening()}catch(e){console.error("خطأ:",e)}}
+function startListening(){if(!currentUser)return;const q=query(collection(db,"users"),where("linkedReferral","==",currentUser.uid));onSnapshot(q,snap=>{const refs=[];snap.forEach(d=>{refs.push({id:d.id,...d.data()})});updateStats(refs);showReferrals(refs)})}
+function updateStats(refs){const reg=refs.length;const active=refs.filter(r=>r.isActive&&r.deposit>0).length;const deposits=refs.reduce((s,r)=>s+(parseFloat(r.deposit)||0),0);const withdrawals=refs.reduce((s,r)=>s+(parseFloat(r.withdrawals)||0),0);const earn=deposits*0.1;document.getElementById('registered').textContent=reg;document.getElementById('activeMembers').textContent=active;document.getElementById('earnings').textContent='$'+earn.toFixed(2);document.getElementById('teamDeposits').textContent='$'+deposits.toFixed(2);document.getElementById('teamWithdrawals').textContent='$'+withdrawals.toFixed(2)}
+function showReferrals(refs){const tbl=document.getElementById('referralsTable');const noD=document.getElementById('noData');if(refs.length===0){tbl.innerHTML='';noD.style.display='block';return}noD.style.display='none';const sorted=refs.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));tbl.innerHTML=sorted.map((r,i)=>{const clr=getUserColor(r.uid||r.id);const dep=parseFloat(r.deposit)||0;const isAct=r.isActive&&dep>0;const sts=isAct?'<span class="status-active">نشط</span>':'<span class="status-inactive">معلق</span>';const uid=r.referralCode?String(1000000+parseInt(r.referralCode)):String(1000000+Math.floor(Math.random()*900000));const dt=r.createdAt?fmtDate(new Date(r.createdAt)):fmtDate(new Date());return`<div class="table-row"><div class="id-number">${uid}</div><div>${dt}</div><div>$${dep.toFixed(2)}</div><div><span class="user-icon" style="background:${clr}">👤</span><br>${sts}</div></div>`}).join('')}
+window.linkReferral=async function(){const code=document.getElementById('referralInput').value.trim();const btn=document.getElementById('linkBtn');if(code.length!==6||!/^\d{6}$/.test(code)){alert('⚠️ الرجاء إدخال كود صحيح (6 أرقام)');return}if(code===myReferralCode){alert('⚠️ لا يمكنك استخدام كودك الخاص');return}btn.disabled=true;btn.textContent='جاري الربط...';try{const userRef=doc(db,"users",currentUser.uid);const userSnap=await getDoc(userRef);if(userSnap.exists()&&userSnap.data().linkedReferral){alert('⚠️ لقد قمت بربط كود بالفعل');btn.disabled=false;btn.textContent='ربط كود الإحالة';return}const q=query(collection(db,"users"),where("referralCode","==",code));const qSnap=await getDocs(q);if(qSnap.empty){alert('⚠️ كود الإحالة غير موجود');btn.disabled=false;btn.textContent='ربط كود الإحالة';return}const refDoc=qSnap.docs[0];if(refDoc.id===currentUser.uid){alert('⚠️ لا يمكنك استخدام كودك الخاص');btn.disabled=false;btn.textContent='ربط كود الإحالة';return}await updateDoc(userRef,{linkedReferral:refDoc.id,deposit:0,withdrawals:0,isActive:false});alert('✅ تم ربط كود الإحالة بنجاح!\nيمكنك الآن البدء بالإيداع');document.getElementById('referralInput').value='';document.getElementById('linkSection').style.display='none';isLinked=true}catch(e){console.error("خطأ:",e);alert('⚠️ حدث خطأ، حاول مرة أخرى');btn.disabled=false;btn.textContent='ربط كود الإحالة'}}
+window.copyCode=function(){const c=document.getElementById('inviteCode').textContent;if(c&&c!=='000000'){navigator.clipboard.writeText(c).then(()=>alert('✅ تم نسخ الكود: '+c)).catch(()=>alert('الكود: '+c))}}
+onAuthStateChanged(auth,u=>{if(u){setupUser(u);setTimeout(()=>{document.getElementById('loading').style.display='none';document.getElementById('mainContent').style.display='block'},500)}else{signInAnonymously(auth).catch(e=>console.error(e))}});
+</script>
+</body>
+</html>
+    
+  </body>
+  
+</html>
