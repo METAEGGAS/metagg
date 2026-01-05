@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>صفحة التحدي</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#3e2723;font-family:Arial,sans-serif;color:#fff;min-height:100vh;overflow-x:hidden;max-width:100vw}
+.header{background:#2c1810;height:50px;display:flex;justify-content:space-between;align-items:center;padding:0 10px;position:sticky;top:0;z-index:100}
+.back-btn{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;padding:5px}
+.lang-btn{background:#5d4037;border:none;color:#fff;padding:8px 15px;border-radius:5px;cursor:pointer;font-size:14px}
+.balance-display{position:absolute;top:60px;right:10px;background:#5d4037;padding:10px 20px;border-radius:8px;font-size:16px;font-weight:bold;z-index:50}
+.content{display:flex;flex-direction:column;align-items:center;padding:80px 10px 30px;max-width:100%}
+.challenge-section{display:flex;flex-direction:column;align-items:center;margin-bottom:40px;width:100%;max-width:500px}
+.icons-row{display:flex;align-items:center;justify-content:center;gap:40px;margin-bottom:15px;position:relative;width:100%}
+.icon-container{display:flex;flex-direction:column;align-items:center}
+.icon-img{width:80px;height:80px;transition:all .3s}
+.icon-center{width:100px;height:100px}
+.icon-label{font-size:14px;margin-top:8px;font-weight:bold;color:#ffb74d}
+.challenge-btn{background:none;border:none;cursor:pointer;padding:0;margin-top:15px}
+.challenge-btn img{width:70px;height:70px;transition:transform .2s}
+.challenge-btn:hover img{transform:scale(1.1)}
+.challenge-btn:disabled{opacity:.5;cursor:not-allowed}
+.price-info{text-align:center;margin-top:10px;font-size:13px;line-height:1.6}
+.price-info .start{color:#f44336}
+.price-info .win{color:#4caf50}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:1000;justify-content:center;align-items:center}
+.modal-content{background:#4e342e;padding:30px;border-radius:10px;text-align:center;max-width:90%;width:400px}
+.modal-content p{margin-bottom:20px;line-height:1.6;font-size:16px}
+.modal-btns{display:flex;gap:15px;justify-content:center;flex-wrap:wrap}
+.modal-btns button{padding:10px 25px;border:none;border-radius:5px;cursor:pointer;font-size:15px;font-weight:bold}
+.confirm-btn{background:#4caf50;color:#fff}
+.cancel-btn{background:#f44336;color:#fff}
+.fire{display:none;position:absolute;font-size:40px;animation:fireAnim .5s ease-out;pointer-events:none}
+@keyframes fireAnim{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(2)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.shake{animation:shake .5s}
+.no-more{text-align:center;font-size:16px;color:#bbb;margin-top:30px;padding:20px}
+.result-modal{background:#2c1810;padding:40px 30px;border-radius:15px;font-size:20px;font-weight:bold}
+.win-text{color:#4caf50;font-size:24px;margin-bottom:15px}
+.lose-text{color:#f44336;font-size:24px;margin-bottom:15px}
+.loading{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:2000;justify-content:center;align-items:center;font-size:20px}
+</style>
+</head>
+<body>
+<div class="header">
+<button class="back-btn" onclick="history.back()">←</button>
+<button class="lang-btn" onclick="toggleLang()">EN/AR</button>
+</div>
+<div class="balance-display" id="balanceDisplay">
+<span data-ar="الرصيد: " data-en="Balance: ">الرصيد: </span>
+<span id="userBalance">0</span>$
+</div>
+<div class="content">
+<div class="challenge-section">
+<div class="icons-row" id="iconsRow1">
+<div class="icon-container">
+<img src="https://cdn-icons-png.flaticon.com/128/1236/1236412.png" class="icon-img" id="iconLeft1">
+<span class="icon-label" data-ar="MY" data-en="MY">MY</span>
+</div>
+<img src="https://cdn-icons-png.flaticon.com/128/8853/8853732.png" class="icon-img icon-center">
+<div class="icon-container">
+<img src="https://cdn-icons-png.flaticon.com/128/1236/1236413.png" class="icon-img" id="iconRight1">
+<span class="icon-label" data-ar="ENEMY" data-en="ENEMY">ENEMY</span>
+</div>
+<div class="fire" id="fire1">🔥</div>
+</div>
+<button class="challenge-btn" onclick="showModal(1,5,15)">
+<img src="https://cdn-icons-png.flaticon.com/128/5262/5262044.png">
+</button>
+<div class="price-info">
+<div class="start" data-ar="سعر البدء: 5$" data-en="Start Price: $5">سعر البدء: 5$</div>
+<div class="win" data-ar="الربح في حال الفوز: 15$" data-en="Win Prize: $15">الربح في حال الفوز: 15$</div>
+</div>
+</div>
+
+<div class="challenge-section">
+<div class="icons-row" id="iconsRow2">
+<div class="icon-container">
+<img src="https://cdn-icons-png.flaticon.com/128/1236/1236412.png" class="icon-img" id="iconLeft2">
+<span class="icon-label" data-ar="MY" data-en="MY">MY</span>
+</div>
+<img src="https://cdn-icons-png.flaticon.com/128/8853/8853732.png" class="icon-img icon-center">
+<div class="icon-container">
+<img src="https://cdn-icons-png.flaticon.com/128/1236/1236413.png" class="icon-img" id="iconRight2">
+<span class="icon-label" data-ar="ENEMY" data-en="ENEMY">ENEMY</span>
+</div>
+<div class="fire" id="fire2">🔥</div>
+</div>
+<button class="challenge-btn" onclick="showModal(2,10,30)">
+<img src="https://cdn-icons-png.flaticon.com/128/5262/5262044.png">
+</button>
+<div class="price-info">
+<div class="start" data-ar="سعر البدء: 10$" data-en="Start Price: $10">سعر البدء: 10$</div>
+<div class="win" data-ar="الربح في حال الفوز: 30$" data-en="Win Prize: $30">الربح في حال الفوز: 30$</div>
+</div>
+</div>
+
+<div class="challenge-section">
+<div class="icons-row" id="iconsRow3">
+<div class="icon-container">
+<img src="https://cdn-icons-png.flaticon.com/128/1236/1236412.png" class="icon-img" id="iconLeft3">
+<span class="icon-label" data-ar="MY" data-en="MY">MY</span>
+</div>
+<img src="https://cdn-icons-png.flaticon.com/128/8853/8853732.png" class="icon-img icon-center">
+<div class="icon-container">
+<img src="https://cdn-icons-png.flaticon.com/128/1236/1236413.png" class="icon-img" id="iconRight3">
+<span class="icon-label" data-ar="ENEMY" data-en="ENEMY">ENEMY</span>
+</div>
+<div class="fire" id="fire3">🔥</div>
+</div>
+<button class="challenge-btn" onclick="showModal(3,20,60)">
+<img src="https://cdn-icons-png.flaticon.com/128/5262/5262044.png">
+</button>
+<div class="price-info">
+<div class="start" data-ar="سعر البدء: 20$" data-en="Start Price: $20">سعر البدء: 20$</div>
+<div class="win" data-ar="الربح في حال الفوز: 60$" data-en="Win Prize: $60">الربح في حال الفوز: 60$</div>
+</div>
+</div>
+
+<div class="no-more" data-ar="لا مزيد من المحتوى" data-en="No More Content">لا مزيد من المحتوى</div>
+</div>
+
+<div class="modal" id="modal">
+<div class="modal-content">
+<p id="modalText"></p>
+<div class="modal-btns">
+<button class="confirm-btn" onclick="startChallenge()" data-ar="تأكيد" data-en="Confirm">تأكيد</button>
+<button class="cancel-btn" onclick="closeModal()" data-ar="إلغاء" data-en="Cancel">إلغاء</button>
+</div>
+</div>
+</div>
+
+<div class="modal" id="resultModal">
+<div class="modal-content result-modal">
+<p id="resultText"></p>
+<button class="confirm-btn" onclick="closeResultModal()" data-ar="حسناً" data-en="OK">حسناً</button>
+</div>
+</div>
+
+<div class="loading" id="loading">
+<span data-ar="جاري التحميل..." data-en="Loading...">جاري التحميل...</span>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import {getAuth,signInAnonymously,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+import {getFirestore,doc,getDoc,updateDoc,setDoc} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyA-MK1RYmvpYJrTOBAQcxDqxhp-z_FOb1o",
+authDomain:"mzjsjjshs.firebaseapp.com",
+projectId:"mzjsjjshs",
+storageBucket:"mzjsjjshs.firebasestorage.app",
+messagingSenderId:"944370558426",
+appId:"1:944370558426:web:70d4ee772c487f48b58ce3",
+measurementId:"G-CWJWKWBBST"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+let currentUser=null;
+let currentBalance=0;
+window.currentLang='ar';
+window.currentChallenge=1;
+window.currentStart=0;
+window.currentWin=0;
+
+signInAnonymously(auth).catch(e=>console.error(e));
+
+onAuthStateChanged(auth,async(user)=>{
+if(user){
+currentUser=user;
+await loadUserBalance();
+}
+});
+
+async function loadUserBalance(){
+if(!currentUser)return;
+const userRef=doc(db,"users",currentUser.uid);
+const userSnap=await getDoc(userRef);
+if(userSnap.exists()){
+currentBalance=userSnap.data().balance||0;
+}else{
+currentBalance=100;
+await setDoc(userRef,{balance:100});
+}
+document.getElementById('userBalance').textContent=currentBalance;
+}
+
+window.showModal=function(num,start,win){
+window.currentChallenge=num;
+window.currentStart=start;
+window.currentWin=win;
+const modalText=document.getElementById('modalText');
+if(window.currentLang==='ar'){
+modalText.innerHTML=`هل تود اللعب بالتحدي؟<br>ستخسر أموال بقيمة ${start}$ دولار في حال خسارتك<br>في حال الفوز ستحصل على مبلغ قدره ${win}$`;
+}else{
+modalText.innerHTML=`Do you want to play the challenge?<br>You will lose $${start} if you lose<br>If you win, you will get $${win}`;
+}
+document.getElementById('modal').style.display='flex';
+};
+
+window.closeModal=function(){
+document.getElementById('modal').style.display='none';
+};
+
+window.closeResultModal=function(){
+document.getElementById('resultModal').style.display='none';
+};
+
+window.toggleLang=function(){
+window.currentLang=window.currentLang==='ar'?'en':'ar';
+const elements=document.querySelectorAll('[data-ar]');
+elements.forEach(el=>{
+const text=el.getAttribute('data-'+window.currentLang);
+if(el.tagName==='BUTTON'||el.tagName==='SPAN'||el.tagName==='DIV'){
+el.textContent=text;
+}
+});
+};
+
+window.startChallenge=async function(){
+if(!currentUser){
+alert(window.currentLang==='ar'?'جاري تسجيل الدخول...':'Signing in...');
+return;
+}
+
+if(currentBalance<window.currentStart){
+closeModal();
+const msg=window.currentLang==='ar'?`رصيدك غير كافٍ! رصيدك الحالي: ${currentBalance}$ والمطلوب: ${window.currentStart}$`:`Insufficient balance! Your balance: $${currentBalance}, Required: $${window.currentStart}`;
+showResult(msg,false);
+return;
+}
+
+closeModal();
+document.getElementById('loading').style.display='flex';
+
+const userRef=doc(db,"users",currentUser.uid);
+currentBalance-=window.currentStart;
+await updateDoc(userRef,{balance:currentBalance});
+document.getElementById('userBalance').textContent=currentBalance;
+
+const left=document.getElementById('iconLeft'+window.currentChallenge);
+const right=document.getElementById('iconRight'+window.currentChallenge);
+const fire=document.getElementById('fire'+window.currentChallenge);
+
+left.classList.add('shake');
+right.classList.add('shake');
+
+setTimeout(()=>{
+left.style.transform='translateX(150px)';
+right.style.transform='translateX(-150px)';
+},500);
+
+setTimeout(async()=>{
+fire.style.display='block';
+fire.style.left='50%';
+fire.style.top='50%';
+fire.style.transform='translate(-50%,-50%)';
+
+const winChance=Math.random();
+const playerWon=winChance<0.30;
+
+setTimeout(async()=>{
+fire.style.display='none';
+left.style.transform='translateX(0)';
+right.style.transform='translateX(0)';
+left.classList.remove('shake');
+right.classList.remove('shake');
+document.getElementById('loading').style.display='none';
+
+if(playerWon){
+currentBalance+=window.currentWin;
+await updateDoc(userRef,{balance:currentBalance});
+document.getElementById('userBalance').textContent=currentBalance;
+const msg=window.currentLang==='ar'?`🎉 مبروك! لقد فزت بـ ${window.currentWin}$<br>رصيدك الجديد: ${currentBalance}$`:`🎉 Congratulations! You won $${window.currentWin}<br>New balance: $${currentBalance}`;
+showResult(msg,true);
+}else{
+const msg=window.currentLang==='ar'?`😢 للأسف! لقد خسرت ${window.currentStart}$<br>رصيدك الحالي: ${currentBalance}$`:`😢 Sorry! You lost $${window.currentStart}<br>Current balance: $${currentBalance}`;
+showResult(msg,false);
+}
+},1000);
+},1000);
+};
+
+function showResult(text,isWin){
+const resultText=document.getElementById('resultText');
+resultText.innerHTML=`<div class="${isWin?'win-text':'lose-text'}">${text}</div>`;
+document.getElementById('resultModal').style.display='flex';
+}
+</script>
+</body>
+</html>
+    
+  </body>
+  
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Record</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#3E2723 0%,#4E342E 100%);min-height:100vh;direction:rtl}#topBar{background:#2C1810;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 12px rgba(0,0,0,0.3);position:relative}#backBtn{background:none;border:none;color:#D7CCC8;font-size:28px;cursor:pointer;padding:5px;transition:color 0.3s;position:absolute;left:20px}#backBtn:hover{color:#fff}#pageTitle{color:#D7CCC8;font-size:20px;font-weight:600;position:absolute;left:50%;transform:translateX(-50%)}#langBtn{background:#5D4037;color:#D7CCC8;border:none;padding:8px 16px;border-radius:20px;cursor:pointer;font-weight:600;font-size:13px;transition:all 0.3s;position:absolute;right:20px}#langBtn:hover{background:#6D4C41;color:#fff}#notificationsList{padding:20px;max-width:900px;margin:0 auto}.notification{background:linear-gradient(145deg,#4E342E,#3E2723);border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 6px 16px rgba(0,0,0,0.4);border-left:4px solid #8D6E63;transition:transform 0.3s}.notification:hover{transform:translateY(-3px)}.notification .header{display:flex;align-items:center;gap:15px;margin-bottom:15px}.notification .icon{width:50px;height:50px;object-fit:contain;background:#5D4037;padding:10px;border-radius:50%;box-shadow:0 4px 8px rgba(0,0,0,0.3)}.notification .info{flex:1}.notification .userName{color:#D7CCC8;font-size:18px;font-weight:700;margin-bottom:5px}.notification .status{display:inline-block;background:#4CAF50;color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;box-shadow:0 2px 6px rgba(76,175,80,0.4)}.notification .message{color:#BCAAA4;line-height:1.8;margin-bottom:12px;font-size:15px}.notification .amount{color:#FFD54F;font-size:22px;font-weight:900;font-family:'Arial Black',sans-serif;margin:10px 0;text-shadow:0 2px 4px rgba(0,0,0,0.3)}.notification .footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid rgba(215,204,200,0.2)}.notification .date,.notification .reqNum{color:#A1887F;font-size:13px;font-weight:700;font-family:'Courier New',monospace}.loading{text-align:center;padding:60px;color:#D7CCC8;font-size:18px}.empty{text-align:center;padding:60px;color:#A1887F;font-size:16px}</style>
+</head>
+<body>
+<div id="topBar"><button id="backBtn" onclick="history.back()">←</button><span id="pageTitle">Record</span><button id="langBtn" onclick="toggleLang()">EN</button></div>
+<div id="notificationsList"><div class="loading">جاري التحميل...</div></div>
+<script type="module">
+import {initializeApp} from"https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import {getFirestore,collection,query,where,onSnapshot,addDoc,serverTimestamp,orderBy,getDocs}from"https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyA-MK1RYmvpYJrTOBAQcxDqxhp-z_FOb1o",authDomain:"mzjsjjshs.firebaseapp.com",projectId:"mzjsjjshs",storageBucket:"mzjsjjshs.firebasestorage.app",messagingSenderId:"944370558426",appId:"1:944370558426:web:70d4ee772c487f48b58ce3",measurementId:"G-CWJWKWBBST"};
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const processedTransactions=new Set();
+let currentLang='ar';
+window.toggleLang=function(){currentLang=currentLang==='ar'?'en':'ar';document.getElementById('langBtn').textContent=currentLang==='ar'?'EN':'AR';renderNotifications()};
+const toEnglishNum=(str)=>String(str).replace(/[٠-٩]/g,d=>d.charCodeAt(0)-1632).replace(/[\u0660-\u0669]/g,d=>d.charCodeAt(0)-1632);
+const texts={ar:{greeting:"مرحباً عزيزي",processed:"تمت معالجة طلب الإيداع الخاص بك بنجاح",amount:"المبلغ المودع:",enjoy:"نتمنى لك تجربة ممتعة مع خدماتنا",completed:"مكتمل",requestNum:"رقم الطلب:",date:"التاريخ:",empty:"لا توجد إشعارات في الوقت الحالي",loading:"جاري التحميل..."},en:{greeting:"Dear",processed:"Your deposit request has been successfully processed",amount:"Deposited Amount:",enjoy:"Enjoy our premium services",completed:"Completed",requestNum:"Request #",date:"Date:",empty:"No notifications available",loading:"Loading..."}};
+let notificationsData=[];
+const notificationsRef=collection(db,"notifications");
+const transactionsRef=collection(db,"transactions");
+async function loadProcessedTransactions(){const q=query(notificationsRef);const snapshot=await getDocs(q);snapshot.forEach(doc=>{const data=doc.data();if(data.transactionId){processedTransactions.add(data.transactionId)}})}
+loadProcessedTransactions();
+const q=query(transactionsRef,where("status","==","approved"));
+onSnapshot(q,(snapshot)=>{snapshot.docChanges().forEach((change)=>{if(change.type==="added"||change.type==="modified"){const data=change.doc.data();const docId=change.doc.id;if(data.status==="approved"&&!processedTransactions.has(docId)){processedTransactions.add(docId);const userName=data.userName||"المستخدم";const amount=data.amount||0;addDoc(notificationsRef,{userId:data.userId,userName:userName,amount:amount,status:"مكتمل",timestamp:serverTimestamp(),transactionId:docId}).catch(err=>console.error("Error:",err))}}})});
+const notifQuery=query(notificationsRef,orderBy("timestamp","desc"));
+onSnapshot(notifQuery,(snapshot)=>{const container=document.getElementById("notificationsList");if(snapshot.empty){container.innerHTML=`<div class="empty">${texts[currentLang].empty}</div>`;return}notificationsData=[];snapshot.forEach((doc)=>{notificationsData.push({id:doc.id,...doc.data()})});renderNotifications()});
+function renderNotifications(){const container=document.getElementById("notificationsList");if(notificationsData.length===0){container.innerHTML=`<div class="loading">${texts[currentLang].loading}</div>`;return}container.innerHTML="";notificationsData.forEach((data)=>{const notifDiv=document.createElement("div");notifDiv.className="notification";const timestamp=data.timestamp?data.timestamp.toDate():new Date();const dateStr=toEnglishNum(timestamp.toLocaleDateString(currentLang==='ar'?'ar-EG':'en-US'));const timeStr=toEnglishNum(timestamp.toLocaleTimeString(currentLang==='ar'?'ar-EG':'en-US',{hour:'2-digit',minute:'2-digit'}));const reqNum=toEnglishNum(data.transactionId?data.transactionId.substring(0,8).toUpperCase():Math.random().toString(36).substring(2,10).toUpperCase());const userName=data.userName||"المستخدم";const amount=toEnglishNum(data.amount||0);const t=texts[currentLang];notifDiv.innerHTML=`<div class="header"><img src="https://cdn-icons-png.flaticon.com/128/19033/19033034.png" alt="deposit" class="icon"><div class="info"><div class="userName">${t.greeting} ${userName}</div><span class="status">${t.completed}</span></div></div><div class="message">${t.processed}</div><div class="amount">${amount} USD</div><div class="message">${t.enjoy}</div><div class="footer"><span class="reqNum">${t.requestNum} ${reqNum}</span><span class="date">${t.date} ${dateStr} - ${timeStr}</span></div>`;container.appendChild(notifDiv)})};
+</script>
+</body>
+</html>
+    
+  </body>
+  
+</html>
